@@ -27,33 +27,33 @@ mo2sec <- 1/(12*24*60*60)
 dir.ed <- file.path(model.dir, "ED2","ED2.v7", site.list[3])
 files.ed <- dir(dir.ed)
 
-dir.ed.lu <- file.path(model.dir, "ED2-LU.v8", site.list[1])
+dir.ed.lu <- file.path(model.dir, "ED-LU", "ED2-LU.v8", site.list[1])
 files.ed.lu <- dir(dir.ed.lu)
 
-dir.clm.bgc <- file.path(model.dir, "CLM45BGC.v5.1", paste0(site.list[1], ".CLM45BGC"))
-dir.clm.cn <- file.path(model.dir, "CLM45CN.v3.1", paste0(site.list[1], ".CLM45CN"))
+dir.clm.bgc <- file.path(model.dir,"CLM-BGC", "CLM45BGC.v5.1", paste0(site.list[1], ".CLM45BGC"))
+dir.clm.cn <- file.path(model.dir, "CLM-CN", "CLM45CN.v3.1",paste0(site.list[1], ".CLM45CN"))
 files.clm.bgc <- dir(dir.clm.bgc)
 files.clm.cn <- dir(dir.clm.cn)
 
-dir.lpj.g <- file.path(model.dir, "LPJ-GUESS.v6", paste(site.list[1], "LPJ-GUESS", sep="_"))
+dir.lpj.g <- file.path(model.dir,"LPJ-GUESS", "LPJ-GUESS.v6",paste(site.list[1], "LPJ-GUESS", sep="_"))
 files.lpj.g <- dir(dir.lpj.g)
 index <- gregexpr("month",files.lpj.g[2])[[1]][1] # LPJ-GUESS has separate annual and monthly files & we just want the monthly
 files.lpj.g.m <- files.lpj.g[substr(files.lpj.g, index, index+4)=="month"]
 files.lpj.g.y <- files.lpj.g[substr(files.lpj.g, index, index+5)=="annual"]
 
-dir.lpj.w <- file.path(model.dir, "LPJ-WSL.v5")
+dir.lpj.w <- file.path(model.dir,"LPJ-WSL", "LPJ-WSL.v5")
 files.lpj.w <- dir(dir.lpj.w)
 
-dir.jules.s <- file.path(model.dir, "JULES.v2", paste(site.list[1], "JULES_STATIC", sep="_"))
+dir.jules.s <- file.path(model.dir,"JULES", "JULES.v2", paste(site.list[1], "JULES_STATIC", sep="_"))
 files.jules.s <- dir(dir.jules.s)
 
-dir.jules.triff <- file.path(model.dir, "JULES_TRIFFID.v1", paste(site.list[1], "JULES_TRIFFID", sep="_"))
+dir.jules.triff <- file.path(model.dir,"JULES_TRIFFID", "JULES_TRIFFID.v1",paste(site.list[1], "JULES_TRIFFID", sep="_"))
 files.jules.triff <- dir(dir.jules.triff)
 
-dir.linkages <- file.path(model.dir, "LINKAGES.v1.3", paste(site.list[1], "LINKAGES", sep="_"))
+dir.linkages <- file.path(model.dir,"LINKAGES", "LINKAGES.v1.3", paste(site.list[1], "LINKAGES", sep="_"))
 files.linkages <- dir(dir.linkages, ".nc")
 
-dir.sib <- file.path(model.dir, "SiBCASA.v1", paste(site.list[1], "SiBCASA", sep="_"))
+dir.sib <- file.path(model.dir,"SiBCASA", "SiBCASA.v1", paste(site.list[1], "SiBCASA", sep="_"))
 files.sib <- dir(dir.sib, ".nc")
 
 # Opening an example file from each model
@@ -189,7 +189,7 @@ nc_close(sib)
 ed <- list()
 ed.diversity <- list()
 for(s in 1:length(site.list)){
-  dir.ed <- file.path(model.dir, "ED2.v7", site.list[s])
+  dir.ed <- file.path(model.dir,"ED2", "ED2.v7", site.list[s])
   files.ed <- dir(dir.ed)
   
   #  nee.temp <- npp.temp <- rh.temp <- ah.temp <- gpp.temp <- vector()
@@ -254,7 +254,7 @@ for(i in 1:length(ed)){
 ed.lu <- list()
 ed.lu.diversity <- list()
 for(s in 1:length(site.list)){
-  dir.ed.lu <- file.path(model.dir, "ED2-LU.v8", site.list[s])
+  dir.ed.lu <- file.path(model.dir, "ED-LU", "ED2-LU.v8", site.list[s])
   files.ed.lu <- dir(dir.ed.lu)
   
   #  nee.temp <- npp.temp <- rh.temp <- ah.temp <- gpp.temp <- vector()
@@ -319,7 +319,7 @@ for(i in 1:length(ed.lu)){
 # -----------------------------------
 clm.bgc <- list() 
 for(s in 1:length(site.list)){
-  dir.clm.bgc <- file.path(model.dir, "CLM45BGC.v5.1", paste0(site.list[s], ".CLM45BGC"))
+  dir.clm.bgc <- file.path(model.dir, "CLM-BGC","CLM45BGC.v5.1", paste0(site.list[s], ".CLM45BGC"))
   # dir.clm.bgc <- file.path(model.dir, "CLM45.v3", site.list[s])
   files.clm.bgc <- dir(dir.clm.bgc)
   clm.bgc.var.list <- list()
@@ -381,7 +381,7 @@ for(i in 1:length(clm.bgc)){
 # -----------------------------------
 clm.cn <- list() 
 for(s in 1:length(site.list)){
-  dir.clm.cn <- file.path(model.dir, "CLM45CN.v3.1", paste0(site.list[s], ".CLM45CN"))
+  dir.clm.cn <- file.path(model.dir, "CLM-CN", "CLM45CN.v3.1", paste0(site.list[s], ".CLM45CN"))
   files.clm.cn <- dir(dir.clm.cn)
   clm.cn.var.list <- list()
   #-----------------------------------
@@ -443,7 +443,7 @@ for(i in 1:length(clm.cn)){
 lpj.g <- list()
 lpj.pft <- c(which(lpj.g.var.y=="AGB"), which(lpj.g.var.y=="TotLivBiom"))
 for(s in 1:length(site.list)){
-  dir.lpj.g <- file.path(model.dir, "LPJ-GUESS.v6", paste(site.list[s], "LPJ-GUESS", sep="_"))
+  dir.lpj.g <- file.path(model.dir,"LPJ-GUESS", "LPJ-GUESS.v6", paste(site.list[s], "LPJ-GUESS", sep="_"))
   files.lpj.g <- dir(dir.lpj.g)
   
   index <- gregexpr("month",files.lpj.g[2])[[1]][1] # LPJ-GUESS has separate annual and monthly files & we just want the monthly
@@ -519,7 +519,7 @@ for(i in 1:length(lpj.g)){
 lpj.w <- list()
 var.pft.lpj.w <- c("LAI", "NPP")
 for(s in 1:length(site.list)){
-  dir.lpj.w <- file.path(model.dir, "LPJ-WSL.v5")
+  dir.lpj.w <- file.path(model.dir, "LPJ-WSL", "LPJ-WSL.v5")
   files.lpj.w <- dir(dir.lpj.w)
   lpj.w.var.list <- list()
   #-----------------------------------
@@ -571,7 +571,7 @@ for(i in 1:length(lpj.w)){
 pft.vars <- c("NPP_PFT", "LAI", "Qh", "Qle", "SnowDepth")
 jules.s <- list() 
 for(s in 1:length(site.list)){
-  dir.jules.s <- file.path(model.dir, "JULES.v2", paste(site.list[s], "JULES_STATIC", sep="_"))
+  dir.jules.s <- file.path(model.dir, "JULES", "JULES.v2", paste(site.list[s], "JULES_STATIC", sep="_"))
   files.jules.s <- dir(dir.jules.s)
   jules.s.var.list <- list()
   #-----------------------------------
@@ -640,7 +640,7 @@ for(i in 1:length(jules.s)){
 pft.vars <- c("NPP_PFT", "Fcomp", "TotLivBio_PFT", "Height", "LAI", "Qh", "Qle", "SnowDepth")
 jules.triff <- list() 
 for(s in 1:length(site.list)){
-  dir.jules.triff <- file.path(model.dir, "JULES_TRIFFID.v1", paste(site.list[s], "JULES_TRIFFID", sep="_"))
+  dir.jules.triff <- file.path(model.dir, "JULES_TRIFFID", "JULES_TRIFFID.v1", paste(site.list[s], "JULES_TRIFFID", sep="_"))
   files.jules.triff <- dir(dir.jules.triff)
   jules.triff.var.list <- list()
   #-----------------------------------
@@ -715,7 +715,7 @@ for(i in 1:length(link.vars)){
 	linkages[["Deciduous"]] <- data.frame(Year=850:2010)
 
 for(s in 1:length(site.list)){
-  dir.linkages <- file.path(model.dir, "LINKAGES.v1.3", paste0(site.list[s], "_LINKAGES"))
+  dir.linkages <- file.path(model.dir, "LINKAGES", "LINKAGES.v1.3", paste0(site.list[s], "_LINKAGES"))
   files.linkages <- dir(dir.linkages)
   files.linkages <- files.linkages[which(as.numeric(substr(files.linkages,1,4))>=850)]
   #-----------------------------------
@@ -753,7 +753,7 @@ for(s in 1:length(site.list)){
 sib <- list()
 sib.diversity <- list()
 for(s in 1:length(site.list)){
-  dir.sib <- file.path(model.dir, "SiBCASA.v1", paste(site.list[s], "SiBCASA", sep="_"))
+  dir.sib <- file.path(model.dir,"SiBCASA", "SiBCASA.v1", paste(site.list[s], "SiBCASA", sep="_"))
   files.sib <- dir(dir.sib)
   
   #  nee.temp <- npp.temp <- rh.temp <- ah.temp <- gpp.temp <- vector()
