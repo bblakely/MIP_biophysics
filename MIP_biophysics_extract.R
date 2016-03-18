@@ -13,8 +13,9 @@ names(sib)
 
 biophys.vars<-c("LW_albedo","SW_albedo","LWnet","SWnet","Qh","Qle","LAI","Evap",
                "lwdown","swdown","Evergreen","Deciduous","Tranp","Grass", "Transp","albedo")
-
+#--------
 ### ED
+#--------
 biophys.index<-which(names(ed) %in% biophys.vars)
 ed.biophys<-ed[biophys.index]
 
@@ -29,8 +30,9 @@ colnames(ed.UNDERC.mat)<-names(ed.biophys)
 ed.UNDERC<-as.data.frame(ed.UNDERC.mat)
 View(ed.UNDERC)
 
-
+#--------
 ### ED.lu
+#--------
 
 ed.lu.biophys.index<-which(names(ed.lu) %in% biophys.vars)
 ed.lu.biophys<-ed.lu[ed.lu.biophys.index]
@@ -46,9 +48,9 @@ colnames(ed.lu.UNDERC.mat)<-names(ed.lu.biophys)
 ed.lu.UNDERC<-as.data.frame(ed.lu.UNDERC.mat)
 View(ed.lu.UNDERC)
 
-
+#--------
 ## CLM.bgc
-
+#--------
 names(clm.bgc)
 
 clm.bgc.biophys.index<-which(names(clm.bgc) %in% biophys.vars)
@@ -65,8 +67,9 @@ colnames(clm.bgc.UNDERC.mat)<-names(clm.bgc.biophys)
 clm.bgc.UNDERC<-as.data.frame(clm.bgc.UNDERC.mat)
 View(clm.bgc.UNDERC)
 
+#--------
 ### lpj.g
-
+#--------
 names(lpj.g)
 
 lpj.g.biophys.index<-which(names(clm.cn) %in% biophys.vars)
@@ -83,8 +86,9 @@ colnames(clm.cn.UNDERC.mat)<-names(clm.cn.biophys)
 clm.cn.UNDERC<-as.data.frame(clm.cn.UNDERC.mat)
 View(clm.cn.UNDERC)
 
-
+#--------
 ### LPJ.g
+#--------
 
 names(lpj.g)
 
@@ -101,9 +105,9 @@ for (i in 1:length(lpj.g.biophys)){
 colnames(lpj.g.UNDERC.mat)<-names(lpj.g.biophys)
 lpj.g.UNDERC<-as.data.frame(lpj.g.UNDERC.mat)
 View(lpj.g.UNDERC)
-
+#--------
 ### LPJ.w
-
+#--------
 names(lpj.w)
 
 lpj.w.biophys.index<-which(names(lpj.w) %in% biophys.vars)
@@ -135,7 +139,44 @@ colnames(lpj.w.comp.UNDERC.mat)<-names(lpj.w.comp)
 lpj.w.comp.UNDERC<-as.data.frame(lpj.w.comp.UNDERC.mat)
 View(lpj.w.comp.UNDERC)
 
+#--------
+###JULES
+#--------
+
+biophys.index<-which(names(jules.s) %in% biophys.vars)
+jules.s.biophys<-jules.s[biophys.index]
+
+jules.s.UNDERC.mat<-matrix(nrow=length(jules.s.biophys[[1]][,3]), ncol = length(jules.s.biophys))
+
+for (i in 1:length(jules.s.biophys)){
+  
+  jules.s.UNDERC.mat[,i]<-jules.s.biophys[[i]][,3]
+  
+}
+colnames(jules.s.UNDERC.mat)<-names(jules.s.biophys)
+jules.s.UNDERC<-as.data.frame(jules.s.UNDERC.mat)
+View(jules.s.UNDERC)
+
+#--------
+###JULES.triff
+#--------
+biophys.index<-which(names(jules.triff) %in% biophys.vars)
+jules.triff.biophys<-jules.triff[biophys.index]
+
+jules.triff.UNDERC.mat<-matrix(nrow=length(jules.triff.biophys[[1]][,3]), ncol = length(jules.triff.biophys))
+
+for (i in 1:length(jules.triff.biophys)){
+  
+  jules.triff.UNDERC.mat[,i]<-jules.triff.biophys[[i]][,3]
+  
+}
+colnames(jules.triff.UNDERC.mat)<-names(jules.triff.biophys)
+jules.triff.UNDERC<-as.data.frame(jules.triff.UNDERC.mat)
+View(jules.triff.UNDERC)
+
+#--------
 ###Linkages
+#--------
 
 names(linkages)
 
@@ -150,7 +191,9 @@ colnames(linkages.UNDERC.mat)<-names(linkages.biophys)
 linkages.UNDERC<-as.data.frame(linkages.UNDERC.mat)
 View(linkages.UNDERC)
 
+#--------
 ### SiBCASA
+#--------
 
 names(sib)
 
