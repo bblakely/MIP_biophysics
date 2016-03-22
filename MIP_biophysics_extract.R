@@ -11,8 +11,10 @@ names(jules.triff)
 names(linkages)
 names(sib)
 
+library(pracma)
+
 biophys.vars<-c("LW_albedo","SW_albedo","LWnet","SWnet","Qh","Qle","LAI","Evap",
-               "lwdown","swdown","Evergreen","Deciduous","Tranp","Grass", "Transp","albedo")
+               "lwdown","swdown","Evergreen","Deciduous","Grass", "Transp","albedo")
 #--------
 ### ED
 #--------
@@ -29,6 +31,15 @@ for (i in 1:length(ed.biophys)){
 colnames(ed.UNDERC.mat)<-names(ed.biophys)
 ed.UNDERC<-as.data.frame(ed.UNDERC.mat)
 View(ed.UNDERC)
+
+#Calculate additional variables
+#ed is still too fucked up to figure out what's going on here.
+
+ed.UNDERC$LWnet_calc<-((1-ed.UNDERC$LW_albedo)*ed.UNDERC$lwdown)
+#ed.UNDERC$LWout_calc<-(ed.UNDERC$lwdown-(-ed.UNDERC$LWnet)) #This only makes sense with a flipped sign
+#ed.UNDERC$RadST_calc<-((ed.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
+#ed.UNDERC$Rnet_calc<-ed.UNDERC$SWnet + (-ed.UNDERC$LWnet)
+#plot(ed.UNDERC$Rnet_calc,(ed.UNDERC$Qh+ed.UNDERC$Qle))
 
 #--------
 ### ED.lu
@@ -66,6 +77,34 @@ for (i in 1:length(clm.bgc.biophys)){
 colnames(clm.bgc.UNDERC.mat)<-names(clm.bgc.biophys)
 clm.bgc.UNDERC<-as.data.frame(clm.bgc.UNDERC.mat)
 View(clm.bgc.UNDERC)
+
+#Calculate additional variables
+clm.bgc.UNDERC$SWnet_calc<-((1-clm.bgc.UNDERC$albedo)*clm.bgc.UNDERC$swdown)
+clm.bgc.UNDERC$LWout_calc<-(clm.bgc.UNDERC$lwdown-(-clm.bgc.UNDERC$LWnet)) #This only makes sense with a flipped sign
+clm.bgc.UNDERC$RadST_calc<-((clm.bgc.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
+clm.bgc.UNDERC$Rnet_calc<-clm.bgc.UNDERC$SWnet_calc + (-clm.bgc.UNDERC$LWnet)
+
+plot(clm.bgc.UNDERC$Rnet_calc,(clm.bgc.UNDERC$Qh+clm.bgc.UNDERC$Qle))
+
+
+#--------
+## CLM.cn
+#--------
+names(clm.cn)
+
+clm.cn.biophys.index<-which(names(clm.cn) %in% biophys.vars)
+clm.cn.biophys<-clm.cn[clm.cn.biophys.index]
+
+clm.cn.UNDERC.mat<-matrix(nrow=length(clm.cn.biophys[[1]][,3]), ncol = length(clm.cn.biophys))
+
+for (i in 1:length(clm.cn.biophys)){
+  
+  clm.cn.UNDERC.mat[,i]<-clm.cn.biophys[[i]][,3]
+  
+}
+colnames(clm.cn.UNDERC.mat)<-names(clm.cn.biophys)
+clm.cn.UNDERC<-as.data.frame(clm.cn.UNDERC.mat)
+View(clm.cn.UNDERC)
 
 #--------
 ### lpj.g
@@ -156,6 +195,15 @@ for (i in 1:length(jules.s.biophys)){
 colnames(jules.s.UNDERC.mat)<-names(jules.s.biophys)
 jules.s.UNDERC<-as.data.frame(jules.s.UNDERC.mat)
 View(jules.s.UNDERC)
+
+#Calculate additional variables
+jules.s.UNDERC$LWout_calc<-(jules.s.UNDERC$lwdown-jules.s.UNDERC$LWnet) #This only makes sense with a flipped sign
+jules.s.UNDERC$RadST_calc<-((jules.s.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
+jules.s.UNDERC$Rnet_calc<-jules.s.UNDERC$SWnet + jules.s.UNDERC$LWnet
+
+plot(jules.s.UNDERC$Rnet_calc,((jules.s.UNDERC$Qh+jules.s.UNDERC$Qle)/2)) #The /2 is what makes this work!
+
+abline(0,1, col='red')
 
 #--------
 ###JULES.triff
