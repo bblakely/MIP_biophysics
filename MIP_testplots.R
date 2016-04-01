@@ -268,6 +268,23 @@ lines(clm.bgc.UNDERC.yr$Evergreen[yr200.an], col="forest green")
 par(new=TRUE)
 plot(clm.bgc.UNDERC.yr$albedo[yr200.an], col='dark gray', type='l', main="Veg change and albedo", ylab="albedo")
 
+#-------
+###CLM.cn
+#--------
+yr.rows<-seq(from=1, to=length(clm.cn.UNDERC[,1]), by=12)
+clm.cn.UNDERC.yr<-matrix(nrow=length(yr.rows),ncol=ncol(clm.cn.UNDERC))
+
+for (i in 1:ncol(clm.cn.UNDERC)){
+  for(v in 1:length(yr.rows)){
+    yr<-yr.rows[v]
+    yr.mean<-mean(clm.cn.UNDERC[(yr:(yr+11)),i])
+    clm.cn.UNDERC.yr[v,i]<-yr.mean
+  }  
+}
+
+colnames(clm.cn.UNDERC.yr)<-colnames(clm.cn.UNDERC)
+clm.cn.UNDERC.yr<-as.data.frame(clm.cn.UNDERC.yr)
+View(clm.cn.UNDERC.yr)
 
 #--------
 ###JULES

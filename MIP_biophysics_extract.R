@@ -18,6 +18,7 @@ biophys.vars<-c("LW_albedo","SW_albedo","LWnet","SWnet","Qh","Qle","LAI","Evap",
 #--------
 ### ED
 #--------
+
 biophys.index<-which(names(ed) %in% biophys.vars)
 ed.biophys<-ed[biophys.index]
 
@@ -33,13 +34,14 @@ ed.UNDERC<-as.data.frame(ed.UNDERC.mat)
 View(ed.UNDERC)
 
 #Calculate additional variables
-#ed is still too fucked up to figure out what's going on here.
-
+#ed is still pretty fucked up
 ed.UNDERC$LWnet_calc<-((1-ed.UNDERC$LW_albedo)*ed.UNDERC$lwdown)
-#ed.UNDERC$LWout_calc<-(ed.UNDERC$lwdown-(-ed.UNDERC$LWnet)) #This only makes sense with a flipped sign
-#ed.UNDERC$RadST_calc<-((ed.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
-#ed.UNDERC$Rnet_calc<-ed.UNDERC$SWnet + (-ed.UNDERC$LWnet)
-#plot(ed.UNDERC$Rnet_calc,(ed.UNDERC$Qh+ed.UNDERC$Qle))
+ed.UNDERC$LWout_calc<-(ed.UNDERC$lwdown - ed.UNDERC$LWnet_calc) #This only makes sense with a flipped sign
+ed.UNDERC$RadST_calc<-((ed.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
+ed.UNDERC$SWnet_calc<-(ed.UNDERC$swdown*(1-ed.UNDERC$SW_albedo))
+ed.UNDERC$Rnet_calc<-ed.UNDERC$SWnet_calc + ed.UNDERC$LWnet_calc
+plot(ed.UNDERC$Rnet_calc,(ed.UNDERC$Qh+ (-ed.UNDERC$Qle)),main='ED energy budget closure', xlab='Rnet', ylab='H+LE')
+abline(0,1, col='red', lwd=3)
 
 #--------
 ### ED.lu
@@ -58,6 +60,15 @@ for (i in 1:length(ed.lu.biophys)){
 colnames(ed.lu.UNDERC.mat)<-names(ed.lu.biophys)
 ed.lu.UNDERC<-as.data.frame(ed.lu.UNDERC.mat)
 View(ed.lu.UNDERC)
+
+#Add calculated variables
+ed.lu.UNDERC$LWnet_calc<-((1-ed.lu.UNDERC$LW_albedo)*ed.lu.UNDERC$lwdown)
+ed.lu.UNDERC$LWout_calc<-(ed.lu.UNDERC$lwdown - ed.lu.UNDERC$LWnet_calc) #This only makes sense with a flipped.lu sign
+ed.lu.UNDERC$RadST_calc<-((ed.lu.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
+ed.lu.UNDERC$SWnet_calc<-(ed.lu.UNDERC$swdown*(1-ed.lu.UNDERC$SW_albedo))
+ed.lu.UNDERC$Rnet_calc<-ed.lu.UNDERC$SWnet_calc + ed.lu.UNDERC$LWnet_calc
+plot(ed.lu.UNDERC$Rnet_calc,(ed.lu.UNDERC$Qh+ (-ed.lu.UNDERC$Qle)),main='ED LU energy budget closure', xlab='Rnet', ylab='H+LE')
+abline(0,1, col='red', lwd=3)
 
 #--------
 ## CLM.bgc
@@ -84,8 +95,8 @@ clm.bgc.UNDERC$LWout_calc<-(clm.bgc.UNDERC$lwdown-(-clm.bgc.UNDERC$LWnet)) #This
 clm.bgc.UNDERC$RadST_calc<-((clm.bgc.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
 clm.bgc.UNDERC$Rnet_calc<-clm.bgc.UNDERC$SWnet_calc + (-clm.bgc.UNDERC$LWnet)
 
-plot(clm.bgc.UNDERC$Rnet_calc,(clm.bgc.UNDERC$Qh+clm.bgc.UNDERC$Qle))
-
+plot(clm.bgc.UNDERC$Rnet_calc,(clm.bgc.UNDERC$Qh+clm.bgc.UNDERC$Qle), main="CLM BGC energy budget closure",xlab='Rnet',ylab='H+LE')
+abline(0,1,col='red', lwd=3)
 
 #--------
 ## CLM.cn
@@ -105,6 +116,15 @@ for (i in 1:length(clm.cn.biophys)){
 colnames(clm.cn.UNDERC.mat)<-names(clm.cn.biophys)
 clm.cn.UNDERC<-as.data.frame(clm.cn.UNDERC.mat)
 View(clm.cn.UNDERC)
+
+#Add calculated variables
+clm.cn.UNDERC$SWnet_calc<-((1-clm.cn.UNDERC$albedo)*clm.cn.UNDERC$swdown)
+clm.cn.UNDERC$LWout_calc<-(clm.cn.UNDERC$lwdown-(-clm.cn.UNDERC$LWnet)) #This only makes sense with a flipped sign
+clm.cn.UNDERC$RadST_calc<-((clm.cn.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
+clm.cn.UNDERC$Rnet_calc<-clm.cn.UNDERC$SWnet_calc + (-clm.cn.UNDERC$LWnet)
+
+plot(clm.cn.UNDERC$Rnet_calc,(clm.cn.UNDERC$Qh+clm.cn.UNDERC$Qle), main="CLM CN energy budget closure",xlab='Rnet',ylab='H+LE')
+abline(0,1,col='red', lwd=3)
 
 #--------
 ### lpj.g
@@ -201,9 +221,12 @@ jules.s.UNDERC$LWout_calc<-(jules.s.UNDERC$lwdown-jules.s.UNDERC$LWnet) #This on
 jules.s.UNDERC$RadST_calc<-((jules.s.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
 jules.s.UNDERC$Rnet_calc<-jules.s.UNDERC$SWnet + jules.s.UNDERC$LWnet
 
-plot(jules.s.UNDERC$Rnet_calc,((jules.s.UNDERC$Qh+jules.s.UNDERC$Qle)/2)) #The /2 is what makes this work!
+plot(jules.s.UNDERC$Rnet_calc,((jules.s.UNDERC$Qh+jules.s.UNDERC$Qle)), main='JULES S energy budget closure',xlab='Rnet', ylab='H+LE') #an /2 is what makes this work!
 
-abline(0,1, col='red')
+abline(0,1, col='red', lwd=3)
+abline(0,2,col='cyan',lwd=3)
+
+legend(x=-30,y=350,legend=c("1:1","2:1"), col=c("red","cyan"), lwd=3)
 
 #--------
 ###JULES.triff
@@ -221,6 +244,19 @@ for (i in 1:length(jules.triff.biophys)){
 colnames(jules.triff.UNDERC.mat)<-names(jules.triff.biophys)
 jules.triff.UNDERC<-as.data.frame(jules.triff.UNDERC.mat)
 View(jules.triff.UNDERC)
+
+#Calculate additional variables
+jules.triff.UNDERC$LWout_calc<-(jules.triff.UNDERC$lwdown-jules.triff.UNDERC$LWnet) #This only makes sense with a flipped sign
+jules.triff.UNDERC$RadST_calc<-((jules.triff.UNDERC$LWout_calc/(.99*5.67E-8))^(1/4))-273
+jules.triff.UNDERC$Rnet_calc<-jules.triff.UNDERC$SWnet + jules.triff.UNDERC$LWnet
+
+plot(jules.triff.UNDERC$Rnet_calc,((jules.triff.UNDERC$Qh+jules.triff.UNDERC$Qle)), main='JULES TRIFF energy budget closure',xlab='Rnet', ylab='H+LE') #an /2 is what makes this work!
+
+abline(0,1, col='red', lwd=3)
+abline(0,5,col='orange',lwd=3)
+
+legend(x=-30,y=1000,legend=c("1:1","5:1"), col=c("red","orange"), lwd=3)
+
 
 #--------
 ###Linkages
