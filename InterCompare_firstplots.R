@@ -1,5 +1,5 @@
 ##Plots to show to modelers pre-meeting
-
+##Yearly------
 ##Rnet
 plot(ed.UNDERC.yr$Rnet_calc, type='l', ylim=c(0,100), col='forest green')
 #lines(ed.lu.UNDERC.yr$Rnet_calc, type='l', col='green')
@@ -32,7 +32,8 @@ lines(jules.s.UNDERC.yr$RadST_calc,col='dark red')
 lines(jules.triff.UNDERC.yr$RadST_calc,col='purple 4')
 
 
-####Decadal
+###Decadal loop--------
+
 ##ED:
 dec.rows<-seq(from=1, to=length(ed.UNDERC.yr[,1]), by=10)
 ed.UNDERC.dec<-matrix(nrow=length(dec.rows),ncol=ncol(ed.UNDERC))
@@ -121,7 +122,7 @@ jules.triff.UNDERC.dec<-as.data.frame(jules.triff.UNDERC.dec)
 View(jules.triff.UNDERC.dec)
 
 
-###Plots Decadal
+###Decadal Plots-----
 ##Rnet
 plot(ed.UNDERC.dec$Rnet_calc, type='l', ylim=c(35,85), col='forest green',
      main='Rnet', xlab='Decade',ylab='Rnet, W/m2,' ,lwd=3)
@@ -185,36 +186,60 @@ legend(x=5,y=.36,legend=c("ED","ED LU","CLM BGC","CLM CN","JULES","JULES TRIFF")
 
 ###Plots for veg-albedo comparisons
 
-plot(ed.UNDERC.dec$Evergreen,ed.UNDERC.dec$SW_albedo, main='Evergreen vs Albedo')
+plot(ed.UNDERC.dec$Evergreen,ed.UNDERC.dec$SW_albedo, main='Evergreen vs Albedo (ED)', xlab="Evergreen Fraction", ylab="Albedo")
 ed.Alb.eg.lm<-lm(ed.UNDERC.dec$SW_albedo~ed.UNDERC.dec$Evergreen)
-abline(.26464,-.03158, col='red')
+abline(.26464,.03158, col='red', lwd=3)
 #legend(.83,.285,legend=c("r2 = 0.24")
 
-plot(ed.UNDERC.dec$Deciduous,ed.UNDERC.dec$SW_albedo, main="Deciduous vs Albedo")
+plot(ed.UNDERC.dec$Deciduous,ed.UNDERC.dec$SW_albedo, main="Deciduous vs Albedo (ED)", xlab='Deciduous Fraction', ylab="Albedo")
 ed.Alb.dc.lm<-lm(ed.UNDERC.dec$SW_albedo~ed.UNDERC.dec$Deciduous)
-abline(.296224,-.03158, col='red')
+abline(.296224,-.03158, col='red', lwd=3)
 #legend(.1,.285,legend=c("r2 = 0.24"))
 
 #plot(ed.lu.UNDERC.dec$Evergreen,ed.lu.UNDERC.dec$SW_albedo)
+#ed.lu.alb.eg.lm<-lm(ed.lu.UNDERC.dec$SW_albedo~ed.lu.UNDERC.dec$Deciduous)
 #plot(ed.lu.UNDERC.dec$Deciduous,ed.lu.UNDERC.dec$SW_albedo)
 
-plot(clm.bgc.UNDERC.dec$Evergreen,clm.bgc.UNDERC.dec$albedo)
-plot(clm.bgc.UNDERC.dec$Deciduous,clm.bgc.UNDERC.dec$albedo)
+plot(clm.bgc.UNDERC.dec$Evergreen,clm.bgc.UNDERC.dec$albedo,main="Evergreen vs Albedo (CLM)", xlab="Evergreen Fraction" , ylab="Albedo")
+plot(clm.bgc.UNDERC.dec$Deciduous,clm.bgc.UNDERC.dec$albedo,main="Deciduous vs Albedo (CLM)",xlab="Deciduous Fraction", ylab="Albedo")
 
-plot(jules.triff.UNDERC.dec$Evergreen,jules.triff.UNDERC.dec$SW_albedo, main="Evergreen vs Albedo")
+
+plot(jules.triff.UNDERC.dec$Evergreen,jules.triff.UNDERC.dec$SW_albedo, main="Evergreen vs Albedo (JULES)",xlab="Evergreen Fraction", ylab="Albedo")
 ed.alb.eg.lm<-lm(jules.triff.UNDERC.dec$SW_albedo~jules.triff.UNDERC.dec$Evergreen)
-abline(0.41709,-0.55573, col='red')
 
-plot(jules.triff.UNDERC.dec$Deciduous,jules.triff.UNDERC.dec$SW_albedo)
-ed.alb.dc.lm<-lm(jules.triff.UNDERC.dec$SW_albedo~jules.triff.UNDERC.dec$Deciduous)
-abline(0.247129,-0.510677, col='red')
 
-plot(jules.triff.UNDERC.dec$Grass,jules.triff.UNDERC.dec$SW_albedo)
+plot(jules.triff.UNDERC.dec$Deciduous,jules.triff.UNDERC.dec$SW_albedo,main="Deciduous vs Albedo (JULES)",,xlab="Deciduous Fraction", ylab="Albedo")
+ed.alb.dc.lm<-lm(jules.triff.UNDERC.dec$SW_albedo~jules.triff.UNDERC.dec$Deciduous,xlab="Deciduous Fraction", ylab="Albedo")
+
+
+plot(jules.triff.UNDERC.dec$Grass,jules.triff.UNDERC.dec$SW_albedo,main="Grass vs Albedo (JULES)",,xlab="Grass Fraction", ylab="Albedo")
 ed.alb.gr.lm<-lm(jules.triff.UNDERC.dec$SW_albedo~jules.triff.UNDERC.dec$Grass)
-abline(0.02586,0.33999, col='red')
+abline(0.02586,0.33999, col='red', lwd=3)
+
+##LE
+
+#ED
+plot(ed.UNDERC.dec$Evergreen,-ed.UNDERC.dec$Qle, main='Evergreen vs LE (ED)', xlab="Evergreen Fraction", ylab="LE")
+ed.le.eg.lm<-lm(-ed.UNDERC.dec$Qle~ed.UNDERC.dec$Evergreen)
+abline(37.988,10.869,col='red',lwd=3
+
+plot(ed.UNDERC.dec$Deciduous,-ed.UNDERC.dec$Qle, main="Deciduous vs LE (ED)", xlab='Deciduous Fraction', ylab="LE")
+ed.le.dc.lm<-lm(-ed.UNDERC.dec$Qle~ed.UNDERC.dec$Deciduous)
+abline(48.857,-10.869, col='red',lwd=3)
+
+#CLM
+plot(clm.bgc.UNDERC.dec$Evergreen,clm.bgc.UNDERC.dec$Qle,main="Evergreen vs LE (CLM)", xlab="Evergreen Fraction" , ylab="LE")
+plot(clm.bgc.UNDERC.dec$Deciduous,clm.bgc.UNDERC.dec$Qle,main="Deciduous vs LE (CLM)",xlab="Deciduous Fraction", ylab="LE")
 
 
+#JULES
+plot(jules.triff.UNDERC.dec$Evergreen,jules.triff.UNDERC.dec$Qle, main="Evergreen vs LE (JULES)",xlab="Evergreen Fraction", ylab="LE")
+ed.le.eg.lm<-lm(jules.triff.UNDERC.dec$Qle~jules.triff.UNDERC.dec$Evergreen)
+abline(523.70,-539.11, col='red',lwd=3)
+
+plot(jules.triff.UNDERC.dec$Deciduous,jules.triff.UNDERC.dec$Qle,main="Deciduous vs LE (JULES)",,xlab="Deciduous Fraction", ylab="LE")
+ed.le.dc.lm<-lm(jules.triff.UNDERC.dec$Qle~jules.triff.UNDERC.dec$Deciduous,xlab="Deciduous Fraction", ylab="LE")
 
 
-
-
+plot(jules.triff.UNDERC.dec$Grass,jules.triff.UNDERC.dec$Qle,main="Grass vs LE (JULES)",xlab="Grass Fraction", ylab="LE")
+ed.le.gr.lm<-lm(jules.triff.UNDERC.dec$Qle~jules.triff.UNDERC.dec$Grass)
